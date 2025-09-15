@@ -1,0 +1,381 @@
+/* --- Basic Setup & Theme Colors --- */
+:root {
+    --cream: #FFF8E7;
+    --pastel-orange: #FFDAB9;
+    --dark-orange: #E88D67;
+    --text-color: #5D4037;
+    --grey: #f0f0f0;
+    --dark-grey: #a0a0a0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Lato', sans-serif;
+    background-color: var(--cream);
+    color: var(--text-color);
+    line-height: 1.6;
+}
+
+/* --- Header --- */
+header {
+    background-color: var(--dark-orange);
+    color: white;
+    text-align: center;
+    padding: 1.5rem 1rem;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+header h1 {
+    font-family: 'Pacifico', cursive;
+    font-size: 2.5rem;
+    font-weight: 400;
+}
+
+/* --- Expandable Sidebar --- */
+.sidebar {
+    height: 100%;
+    width: 250px;
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    left: -250px; /* Hidden by default */
+    background-color: var(--dark-orange);
+    overflow-x: hidden;
+    transition: 0.5s;
+    padding-top: 60px;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
+}
+
+.sidebar a {
+    padding: 10px 15px;
+    text-decoration: none;
+    font-size: 1.2rem;
+    color: white;
+    display: block;
+    transition: 0.3s;
+}
+
+.sidebar a:hover {
+    background-color: var(--pastel-orange);
+    color: var(--text-color);
+}
+
+.sidebar.active {
+    left: 0;
+}
+
+.menu-toggle {
+    position: fixed;
+    top: 25px;
+    left: 20px;
+    z-index: 1001;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.8rem;
+    cursor: pointer;
+}
+
+/* --- Main Content Sections --- */
+main {
+    padding: 1rem;
+}
+
+.content-section, .hero-section, .consult-section {
+    padding: 2rem 1rem;
+    text-align: center;
+}
+
+.content-section h2 {
+    font-size: 2rem;
+    color: var(--dark-orange);
+    margin-bottom: 1rem;
+}
+
+/* --- Hero Section --- */
+.hero-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+}
+
+.hero-text h2 {
+    font-size: 1.3rem;
+    font-style: italic;
+    font-weight: 400;
+}
+
+.hero-image img {
+    max-width: 250px;
+    border-radius: 15px;
+    border: 5px solid var(--pastel-orange);
+}
+
+/* --- "Why Us" Section Fade Effect --- */
+.fade-text {
+    max-height: 3.2em; /* Approx 2 lines */
+    overflow: hidden;
+    position: relative;
+    text-align: left;
+    margin-bottom: 1.5rem;
+    transition: max-height 0.5s ease-out; /* Added transition */
+}
+
+.fade-text::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 1.6em;
+    background: linear-gradient(to bottom, transparent, var(--cream));
+    transition: background 0.5s; /* Added transition */
+}
+
+/* Styles for when the text is expanded */
+.fade-text.expanded {
+    max-height: 12em; /* Height for ~7 lines */
+}
+
+.fade-text.expanded::after {
+    background: none; /* Removes the fade effect */
+}
+
+
+/* --- Buttons --- */
+.btn, .btn-whatsapp {
+    display: inline-block;
+    background-color: var(--dark-orange);
+    color: white;
+    padding: 12px 25px;
+    text-decoration: none;
+    border-radius: 25px;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+    border: none;
+    cursor: pointer;
+    font-size: 1rem;
+    font-family: 'Lato', sans-serif; /* Ensure button font is consistent */
+}
+
+.btn:hover, .btn-whatsapp:hover {
+    background-color: #c96f4a;
+    transform: translateY(-2px);
+}
+
+.btn-whatsapp {
+    background-color: #25D366;
+}
+.btn-whatsapp:hover {
+    background-color: #1DA851;
+}
+
+.btn-whatsapp i {
+    margin-right: 8px;
+}
+
+
+/* --- Testimonials --- */
+.testimonial-grid {
+    display: grid;
+    gap: 1.5rem;
+}
+
+.testimonial-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+    border-left: 5px solid var(--pastel-orange);
+}
+
+.testimonial-card p {
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.testimonial-card h4 {
+    color: var(--dark-orange);
+    text-align: right;
+}
+
+/* --- Page 2: How It Works --- */
+.steps-container {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    text-align: left;
+}
+
+.step-box {
+    background-color: white;
+    border-radius: 10px;
+    padding: 1rem;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.step-number {
+    font-size: 3rem;
+    font-weight: bold;
+    color: var(--dark-grey);
+    background-color: var(--grey);
+    min-width: 60px;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    margin-right: 1.5rem;
+}
+
+.step-text h4 {
+    font-size: 1.2rem;
+    color: var(--dark-orange);
+}
+
+/* --- Packages Pop-up --- */
+.popup-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.6);
+    z-index: 2000;
+    display: none; /* Hidden by default */
+    justify-content: center;
+    align-items: center;
+}
+
+.popup-content {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    text-align: center;
+    position: relative;
+}
+
+.popup-close {
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 2rem;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--dark-grey);
+}
+
+.package-slider {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 1rem;
+}
+
+.package-container {
+    display: flex;
+    width: 100%;
+    overflow: hidden;
+}
+
+.package-card {
+    min-width: 100%;
+    padding: 2rem;
+    background-color: var(--grey);
+    border-radius: 10px;
+    font-size: 1.5rem;
+    font-weight: bold;
+    transition: transform 0.5s ease;
+}
+
+.slider-arrow {
+    background: none;
+    border: none;
+    font-size: 2rem;
+    cursor: pointer;
+    color: var(--dark-orange);
+    padding: 0 1rem;
+}
+
+
+/* --- Footer --- */
+footer {
+    background-color: var(--text-color);
+    color: var(--cream);
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.footer-content h3 {
+    margin-bottom: 1rem;
+    color: var(--pastel-orange);
+}
+
+.social-links a {
+    color: white;
+    font-size: 1.8rem;
+    margin: 0 10px;
+    transition: color 0.3s;
+}
+.social-links a:hover {
+    color: var(--pastel-orange);
+}
+
+.footer-nav {
+    margin-top: 1rem;
+}
+
+.footer-nav a {
+    color: var(--cream);
+    text-decoration: none;
+    margin: 0 5px;
+}
+.footer-nav a:hover {
+    text-decoration: underline;
+}
+
+/* --- Responsive Design (for Desktops) --- */
+@media (min-width: 768px) {
+    .main-content {
+        margin-left: 0;
+    }
+
+    .hero-section {
+        flex-direction: row;
+        text-align: left;
+        max-width: 900px;
+        margin: 0 auto;
+    }
+    
+    .hero-text {
+        flex: 1;
+    }
+    
+    .hero-image {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .testimonial-grid {
+        grid-template-columns: repeat(3, 1fr);
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+
+    .content-section {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+}
