@@ -95,6 +95,11 @@ main {
     font-size: 2rem;
     color: var(--dark-orange);
     margin-bottom: 1rem;
+    font-weight: 700; /* Makes the font bolder */
+    text-shadow: 1px 1px 3px rgba(93, 64, 55, 0.2); /* Adds a subtle, soft shadow */
+    padding-bottom: 0.5rem; /* Adds space between text and the line */
+    border-bottom: 3px solid var(--pastel-orange); /* Creates the underline */
+    display: inline-block; /* Ensures the line is only as wide as the text */
 }
 
 /* --- Hero Section --- */
@@ -116,37 +121,6 @@ main {
     border-radius: 15px;
     border: 5px solid var(--pastel-orange);
 }
-
-/* --- "Why Us" Section Fade Effect --- */
-.fade-text {
-    max-height: 3.2em; /* Approx 2 lines */
-    overflow: hidden;
-    position: relative;
-    text-align: left;
-    margin-bottom: 1.5rem;
-    transition: max-height 0.5s ease-out; /* Added transition */
-}
-
-.fade-text::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    height: 1.6em;
-    background: linear-gradient(to bottom, transparent, var(--cream));
-    transition: background 0.5s; /* Added transition */
-}
-
-/* Styles for when the text is expanded */
-.fade-text.expanded {
-    max-height: 12em; /* Height for ~7 lines */
-}
-
-.fade-text.expanded::after {
-    background: none; /* Removes the fade effect */
-}
-
 
 /* --- Buttons --- */
 .btn, .btn-whatsapp {
@@ -345,6 +319,42 @@ footer {
     text-decoration: underline;
 }
 
+/* --- "Why Us" Feature Boxes --- */
+.feature-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* 1 column on mobile */
+    gap: 1.5rem;
+    margin-top: 2rem;
+    text-align: left;
+}
+
+.feature-box {
+    background-color: white;
+    padding: 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+    border-top: 5px solid var(--pastel-orange);
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature-box:hover,
+.feature-box:active {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+}
+
+.feature-box i {
+    font-size: 2.5rem;
+    color: var(--dark-orange);
+    margin-bottom: 1rem;
+}
+
+.feature-box h3 {
+    font-size: 1.25rem;
+    color: var(--text-color);
+    margin-bottom: 0.5rem;
+}
+
 /* --- Responsive Design (for Desktops) --- */
 @media (min-width: 768px) {
     .main-content {
@@ -377,5 +387,62 @@ footer {
     .content-section {
         max-width: 800px;
         margin: 0 auto;
+    }
+    
+    .feature-grid {
+        grid-template-columns: repeat(2, 1fr); /* 2 columns on desktop */
+    }
+}
+
+/* --- Page 2: About the Programme Section --- */
+.about-container {
+    display: flex;
+    flex-direction: column; /* Stacks on mobile */
+    align-items: center;
+    gap: 2rem;
+    text-align: left;
+}
+
+.about-image {
+    order: 1; /* Image first on mobile */
+}
+
+.about-text {
+    order: 2; /* Text second on mobile */
+}
+
+.about-image img {
+    max-width: 250px;
+}
+
+.about-text h3 {
+    font-size: 1.3rem;
+    font-weight: 400;
+    line-height: 1.5;
+    margin-bottom: 1rem;
+    color: var(--dark-orange);
+}
+
+.about-text p {
+    margin-bottom: 1rem;
+}
+
+/* On larger screens, switch to a two-column layout with image on the right */
+@media (min-width: 768px) {
+    .about-container {
+        flex-direction: row; 
+        align-items: flex-start;
+    }
+
+    .about-image {
+        order: 2; 
+        flex: 1;
+        display: flex;
+        justify-content: center;
+    }
+
+    .about-text {
+        order: 1;
+        flex: 1.5; /* Give text a bit more space */
     }
 }

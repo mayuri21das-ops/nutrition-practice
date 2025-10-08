@@ -1,5 +1,27 @@
 document.addEventListener('DOMContentLoaded', function() {
     
+    // --- Load "Why Us?" Section from external file ---
+    const whyUsContainer = document.getElementById('why-us');
+    if (whyUsContainer) {
+        fetch('why-us-section.html')
+            .then(response => response.text())
+            .then(data => {
+                whyUsContainer.innerHTML = data;
+            })
+            .catch(error => console.error('Error loading why-us section:', error));
+    }
+
+    // --- Load Shared Footer ---
+    const footerContainer = document.getElementById('footer');
+    if (footerContainer) {
+        fetch('footer.html')
+            .then(response => response.text())
+            .then(data => {
+                footerContainer.innerHTML = data;
+            })
+            .catch(error => console.error('Error loading footer:', error));
+    }
+
     // --- Expandable Sidebar Logic ---
     const menuToggle = document.getElementById('menu-toggle');
     const sidebar = document.getElementById('sidebar');
@@ -7,26 +29,6 @@ document.addEventListener('DOMContentLoaded', function() {
     if(menuToggle && sidebar) {
         menuToggle.addEventListener('click', function() {
             sidebar.classList.toggle('active');
-        });
-    }
-
-    // --- "Read more" / "Get started" button logic ---
-    const whyUsBtn = document.getElementById('why-us-btn');
-    const whyUsText = document.getElementById('why-us-text');
-
-    // Check if these elements exist on the page (they are only on index.html)
-    if (whyUsBtn && whyUsText) {
-        whyUsBtn.addEventListener('click', () => {
-            // Check if the text is already expanded by looking for the 'expanded' class
-            if (whyUsText.classList.contains('expanded')) {
-                // If it is expanded, the button says "Get started", so we redirect
-                window.location.href = 'page2.html';
-            } else {
-                // If it is not expanded, add the class to expand the text
-                whyUsText.classList.add('expanded');
-                // And change the button's text
-                whyUsBtn.textContent = 'Get started';
-            }
         });
     }
 
@@ -63,7 +65,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
         function updateSlider() {
             const offset = -currentIndex * 100;
-            // The transform should be on each card for this simple setup
             packages.forEach(card => {
                  card.style.transform = `translateX(${offset}%)`;
             });
