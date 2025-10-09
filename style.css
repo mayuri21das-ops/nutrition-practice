@@ -229,33 +229,6 @@ main {
     align-items: center;
 }
 
-.popup-content {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 15px;
-    width: 90%;
-    max-width: 500px;
-    text-align: center;
-    position: relative;
-}
-
-.popup-close {
-    position: absolute;
-    top: 10px;
-    right: 15px;
-    font-size: 2rem;
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: var(--dark-grey);
-}
-
-.package-slider {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-top: 1rem;
-}
 
 .package-container {
     display: flex;
@@ -271,15 +244,6 @@ main {
     font-size: 1.5rem;
     font-weight: bold;
     transition: transform 0.5s ease;
-}
-
-.slider-arrow {
-    background: none;
-    border: none;
-    font-size: 2rem;
-    cursor: pointer;
-    color: var(--dark-orange);
-    padding: 0 1rem;
 }
 
 
@@ -444,5 +408,74 @@ footer {
     .about-text {
         order: 1;
         flex: 1.5; /* Give text a bit more space */
+    }
+}
+
+/* --- Packages Section --- */
+.packages-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+    margin-top: 2rem;
+}
+
+.package-card {
+    background-color: white;
+    border-radius: 10px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    border-top: 5px solid var(--pastel-orange);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.07);
+    display: flex;
+    flex-direction: column;
+}
+
+.package-card .card-icon {
+    font-size: 2.5rem;
+    color: var(--dark-orange);
+    margin-bottom: 1rem;
+}
+
+.package-card h3 {
+    font-size: 1.5rem;
+    color: var(--text-color);
+    margin-bottom: 0.75rem;
+}
+
+.package-best-for {
+    font-style: italic;
+    color: #777;
+    margin-bottom: 1.5rem;
+    flex-grow: 1; /* Pushes price/button down */
+}
+
+.package-card ul {
+    list-style: none;
+    padding: 0;
+    text-align: left;
+    margin-bottom: 1.5rem;
+}
+
+.package-card li {
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: flex-start;
+}
+
+.package-card li .fa-check {
+    color: var(--dark-orange);
+    margin-right: 0.75rem;
+    margin-top: 4px;
+}
+
+.package-price {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 1.5rem;
+}
+
+@media (min-width: 992px) {
+    .packages-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
