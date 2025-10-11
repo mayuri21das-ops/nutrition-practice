@@ -30,10 +30,26 @@ header {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+/* --- Updated Header Title --- */
 header h1 {
     font-family: 'Pacifico', cursive;
-    font-size: 2.5rem;
+    font-size: 3rem; /* Made 'Nutri Talks' larger */
     font-weight: 400;
+    color: white;
+    line-height: 1.2; /* Adjusted for two lines */
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.2); /* Added a subtle shadow to make it pop */
+    margin: 0;
+}
+
+/* --- New Subtitle Style --- */
+header h1 .subtitle {
+    display: block; /* Puts 'with Mayuri' on its own line */
+    font-family: 'Lato', sans-serif; /* A clean, professional font */
+    font-size: 1.2rem; /* Smaller size for the subtitle */
+    font-weight: 400;
+    letter-spacing: 1.5px; /* Adds elegant spacing */
+    color: var(--pastel-orange); /* Uses a color from your theme */
+    text-shadow: none; /* The subtitle doesn't need a shadow */
 }
 
 /* --- Expandable Sidebar --- */
@@ -120,6 +136,12 @@ main {
     max-width: 250px;
     border-radius: 15px;
     border: 5px solid var(--pastel-orange);
+}
+
+.hero-image {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 /* --- Buttons --- */
@@ -422,7 +444,7 @@ footer {
 .package-card {
     background-color: white;
     border-radius: 10px;
-    padding: 2rem 1.5rem;
+    padding: 1.5rem; /* Reduced padding */
     text-align: center;
     border-top: 5px solid var(--pastel-orange);
     box-shadow: 0 4px 15px rgba(0,0,0,0.07);
@@ -431,21 +453,22 @@ footer {
 }
 
 .package-card .card-icon {
-    font-size: 2.5rem;
+    font-size: 2.2rem; /* Slightly smaller icon */
     color: var(--dark-orange);
     margin-bottom: 1rem;
 }
 
 .package-card h3 {
-    font-size: 1.5rem;
+    font-size: 1.3rem; /* Smaller title */
     color: var(--text-color);
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .package-best-for {
     font-style: italic;
     color: #777;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
+    font-size: 0.9rem; /* Smaller text */
     flex-grow: 1; /* Pushes price/button down */
 }
 
@@ -453,13 +476,14 @@ footer {
     list-style: none;
     padding: 0;
     text-align: left;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
 }
 
 .package-card li {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem; /* Reduced space between items */
     display: flex;
     align-items: flex-start;
+    font-size: 0.9rem; /* Smaller list text */
 }
 
 .package-card li .fa-check {
@@ -469,9 +493,47 @@ footer {
 }
 
 .package-price {
-    font-size: 1.1rem;
+    font-size: 1rem; /* Smaller price text */
     font-weight: bold;
-    margin-bottom: 1.5rem;
+    margin-bottom: 1.25rem;
+}
+
+/* --- Hero Credentials Section --- */
+.credentials {
+    margin-top: 1.5rem; /* Space between photo and text */
+    text-align: center; /* Center the text block */
+}
+
+.credentials ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.credentials li {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    margin-bottom: 0.75rem;
+    display: flex;
+    align-items: center;
+    text-align: left; /* Keep list items left-aligned */
+}
+
+.credentials li i {
+    color: var(--dark-orange);
+    width: 25px;
+    margin-right: 0.5rem;
+}
+
+/* On desktops, right-align the credentials box */
+@media (min-width: 768px) {
+    .credentials {
+        text-align: right;
+    }
+
+    .credentials ul {
+        margin: 0 0 0 auto; /* Aligns the block to the right */
+    }
 }
 
 @media (min-width: 992px) {
