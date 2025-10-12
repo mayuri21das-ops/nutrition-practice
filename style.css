@@ -145,7 +145,7 @@ main {
 }
 
 /* --- Buttons --- */
-.btn, .btn-whatsapp {
+.btn, .btn-whatsapp, .btn-instagram{
     display: inline-block;
     background-color: var(--dark-orange);
     color: white;
@@ -176,13 +176,32 @@ main {
     margin-right: 8px;
 }
 
-
-/* --- Testimonials --- */
-.testimonial-grid {
-    display: grid;
-    gap: 1.5rem;
+/* --- Instagram Button & Consult Layout --- */
+.btn-instagram {
+    background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
 }
 
+.btn-instagram i {
+    margin-right: 8px;
+}
+
+.consult-buttons {
+    display: flex;
+    flex-direction: column; /* Stack buttons on mobile */
+    gap: 1rem; /* Space between buttons */
+    align-items: center;
+}
+
+/* On larger screens, place buttons side-by-side */
+@media (min-width: 768px) {
+    .consult-buttons {
+        flex-direction: row; /* Side-by-side on desktop */
+        justify-content: center;
+    }
+}
+
+
+/* --- Testimonials --- */
 .testimonial-card {
     background: white;
     padding: 1.5rem;
@@ -201,6 +220,50 @@ main {
     text-align: right;
 }
 
+
+/* --- Testimonial Slider --- */
+.testimonial-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem; /* Space between arrows and slider */
+    max-width: 750px; /* A bit wider to fit arrows */
+    margin: 2rem auto 0;
+}
+
+.testimonial-slider {
+    width: 100%; /* Take up available space */
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.testimonial-slides {
+    display: flex;
+    width: 500%; /* 100% for each of the 5 slides */
+    transition: transform 0.5s ease-in-out;
+}
+
+.testimonial-slider .testimonial-card {
+    width: 20%; /* Each of the 5 slides takes up 1/5 of the container */
+    box-sizing: border-box;
+}
+
+/* New Arrow Styles */
+.slider-arrow {
+    background-color: transparent;
+    color: var(--dark-orange);
+    border: none;
+    cursor: pointer;
+    font-size: 2.5rem; /* Bigger, more visible arrows */
+    padding: 0 0.5rem;
+    transition: transform 0.2s, color 0.2s;
+    flex-shrink: 0; /* Prevents arrows from shrinking */
+}
+
+.slider-arrow:hover {
+    color: var(--text-color);
+    transform: scale(1.1);
+}
 /* --- Page 2: How It Works --- */
 .steps-container {
     display: flex;
@@ -534,6 +597,53 @@ footer {
     .credentials ul {
         margin: 0 0 0 auto; /* Aligns the block to the right */
     }
+}
+
+/* --- Floating Section Navigation --- */
+#section-nav {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+#section-nav button {
+    width: 50px;
+    height: 50px;
+    background-color: var(--dark-orange);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    transition: background-color 0.3s, opacity 0.3s, transform 0.3s;
+}
+
+#section-nav button:hover {
+    background-color: #c96f4a;
+    transform: scale(1.1);
+}
+
+#section-nav button.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: scale(0.8);
+}
+
+/* --- Consult Section Text --- */
+#consult h3 {
+    font-size: 1.8rem;
+    font-weight: 400;
+    color: var(--dark-orange); /* Uses your main theme color */
+    padding-bottom: 0.5rem; /* Adds space between the text and the line */
+    margin-bottom: 1.5rem; /* Adds a bit more space above the button */
 }
 
 @media (min-width: 992px) {
