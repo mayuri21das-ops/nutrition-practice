@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diet Plan PDF Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Inter:wght@400;500;700&family=Roboto:wght@400;700&family=Lora:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+    <style>
+        /* Custom styles for the cozy theme and PDF output */
+        :root {
+            --cream: #FFF8E7;
+            --pastel-orange: #FFDAB9;
+            --dark-orange: #E88D67;
+            --text-color: #5D4037;
+            --grey: #f0f0f0;
+            --dark-grey: #a0a0a0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--grey);
+        }
+        
+        #pdf-content {
+            background-color: var(--cream);
+            color: var(--text-color);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            width: 210mm;
+            min-height: 297mm;
+            padding: 20mm;
+            margin: 0 auto 2rem auto;
+            transform-origin: top center;
+            transition: transform 0.3s ease;
+        }
+
+        #pdf-content h1, #pdf-content h2, #pdf-content p, #pdf-content table {
+            margin-bottom: 1.5rem;
+        }
+
+        .pdf-main-title {
+            font-family: 'Pacifico', cursive;
+            font-size: 3.5rem;
+            text-align: center;
+            color: var(--dark-orange);
+            font-weight: 400;
+        }
+        
+        .pdf-section-title {
+            font-family: 'Inter', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--text-color);
+            border-bottom: 2px solid var(--dark-grey);
+            padding-bottom: 0.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .pdf-paragraph {
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        .pdf-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .pdf-table th, .pdf-table td {
+            border: 1px solid var(--pastel-orange);
+            padding: 12px;
+            text-align: left;
+        }
+
+        .pdf-table th {
+            background-color: var(--pastel-orange);
+            font-weight: 500;
+        }
+
+        [contenteditable]:focus {
+            outline: 2px solid var(--dark-orange);
+            box-shadow: 0 0 5px rgba(232, 141, 103, 0.5);
+            border-radius: 4px;
+        }
+        
+        .remove-btn {
+            display: none;
+            cursor: pointer;
+            font-weight: bold;
+            color: var(--dark-orange);
+        }
+
+        .element-container:hover .remove-btn {
+            display: inline;
+        }
+
+        .loader {
+            border: 5px solid var(--grey);
+            border-top: 5px solid var(--dark-orange);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Loading Modal -->
+    <div id="loading-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center">
+        <div class="bg-white p-8 rounded-lg shadow-xl text-center">
+            <div class="loader mx-auto mb-4"></div>
+            <p class="text-lg font-medium text-gray-700">Generating your beautiful diet plan...</p>
+        </div>
+    </div>
+
+    <!-- Add Table Modal -->
+    <div id="add-table-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 z-40 flex items-center justify-center p-4">
+        <div class="bg-white p-6 rounded-lg shadow-xl text-center w-full max-w-sm">
+            <h3 class="text-xl font-bold mb-4 text-gray-700">Create Table</h3>
+            <div class="mb-4">
+                <label for="columns-input" class="block text-left text-sm font-medium text-gray-600 mb-1">Columns:</label>
+                <input type="number" id="columns-input" value="3" min="1" class="w-full p-2 border border-gray-300 rounded-md">
+            </div>
+            <div class="mb-6">
+                 <label for="rows-input" class="block text-left text-sm font-medium text-gray-600 mb-1">Rows:</label>
+                <input type="number" id="rows-input" value="2" min="1" class="w-full p-2 border border-gray-300 rounded-md">
+            </div>
+            <div class="flex justify-end gap-3">
+                <button onclick="hideTableModal()" class="bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold py-2 px-4 rounded-lg">Cancel</button>
+                <button onclick="createTableFromModal()" style="background-color: #5D4037;" class="text-white font-bold py-2 px-4 rounded-lg">Create</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Text Editor Toolbar -->
+    <div id="text-editor-toolbar" class="hidden absolute z-20 bg-white shadow-lg rounded-lg p-1 flex items-center gap-1 border border-gray-200">
+        <select onchange="formatText('fontName', this.value)" class="text-sm border-gray-200 rounded p-1 focus:outline-none">
+            <option value="Inter">Inter</option>
+            <option value="Roboto">Roboto</option>
+            <option value="Lora">Lora</option>
+            <option value="Montserrat">Montserrat</option>
+        </select>
+        <select onchange="formatText('fontSize', this.value)" class="text-sm border-gray-200 rounded p-1 focus:outline-none">
+            <option value="2">Small</option>
+            <option value="3" selected>Normal</option>
+            <option value="5">Large</option>
+            <option value="6">Heading</option>
+        </select>
+        <button onclick="formatText('bold')" class="font-bold p-2 hover:bg-gray-100 rounded">B</button>
+        <button onclick="formatText('italic')" class="italic p-2 hover:bg-gray-100 rounded">I</button>
+    </div>
+
+
+    <div class="flex flex-col md:flex-row min-h-screen">
+        <!-- Sidebar -->
+        <aside class="w-full md:w-64 bg-white p-4 shadow-lg md:h-screen md:sticky md:top-0">
+            <h2 class="text-2xl font-bold text-center mb-6 text-gray-700 hidden md:block">Controls</h2>
+            <div class="flex flex-row flex-wrap md:flex-col gap-3 justify-center">
+                <button onclick="addSectionTitle()" style="background-color: #E88D67;" class="w-full text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 hover:opacity-90">
+                    Add Section Title
+                </button>
+                <button onclick="addParagraph()" style="background-color: #FFDAB9;" class="w-full text-[#5D4037] font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 hover:opacity-90">
+                    Add Paragraph
+                </button>
+                <button onclick="addTable()" style="background-color: #5D4037;" class="w-full text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 hover:opacity-90">
+                    Add Table
+                </button>
+                <button id="generate-pdf-btn" onclick="generatePdf()" style="background-color: #E88D67;" class="w-full text-white font-bold py-3 px-4 rounded-lg transition-transform transform hover:scale-105 hover:opacity-90 mt-auto md:mt-6">
+                    Generate PDF
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="flex-1 p-4 md:p-8 overflow-y-auto">
+            <header class="text-center mb-8">
+                <h1 class="text-4xl md:text-5xl font-bold text-gray-700">Diet Plan PDF Generator</h1>
+                <p class="text-gray-500 mt-2">Build your diet plan below and export it as a PDF.</p>
+            </header>
+
+            <div id="pdf-content">
+                <div class="element-container">
+                    <h1 class="pdf-main-title">Nutri Talks with Mayuri</h1>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+        const pdfContent = document.getElementById('pdf-content');
+        const editorToolbar = document.getElementById('text-editor-toolbar');
+        const tableModal = document.getElementById('add-table-modal');
+
+        // --- Event Listeners for Text Toolbar ---
+        pdfContent.addEventListener('mouseup', showToolbarOnSelection);
+        pdfContent.addEventListener('keyup', showToolbarOnSelection);
+        document.addEventListener('mousedown', (e) => {
+            if (!editorToolbar.contains(e.target) && !pdfContent.contains(e.target)) {
+                editorToolbar.classList.add('hidden');
+            }
+        });
+
+        function showToolbarOnSelection() {
+            const selection = window.getSelection();
+            if (selection.toString().trim().length > 0) {
+                const range = selection.getRangeAt(0);
+                const rect = range.getBoundingClientRect();
+                
+                // Position toolbar above selection
+                editorToolbar.style.left = `${rect.left + window.scrollX + (rect.width / 2) - (editorToolbar.offsetWidth / 2)}px`;
+                editorToolbar.style.top = `${rect.top + window.scrollY - editorToolbar.offsetHeight - 5}px`;
+                editorToolbar.classList.remove('hidden');
+            } else {
+                editorToolbar.classList.add('hidden');
+            }
+        }
+        
+        function formatText(command, value = null) {
+            document.execCommand(command, false, value);
+            pdfContent.focus(); // Keep focus in the editor
+        }
+        
+        // --- Element Creation ---
+        function createEditableContainer() {
+            const container = document.createElement('div');
+            container.className = 'element-container relative';
+            
+            const removeBtn = document.createElement('span');
+            removeBtn.innerHTML = '&times;';
+            removeBtn.className = 'remove-btn absolute top-0 right-0 -mt-2 -mr-2 bg-white rounded-full h-6 w-6 flex items-center justify-center shadow-md';
+            removeBtn.onclick = () => container.remove();
+            
+            container.appendChild(removeBtn);
+            return container;
+        }
+
+        function addSectionTitle() {
+            const container = createEditableContainer();
+            const h2 = document.createElement('h2');
+            h2.className = 'pdf-section-title';
+            h2.contentEditable = true;
+            h2.textContent = 'Your Section Title';
+            container.appendChild(h2);
+            pdfContent.appendChild(container);
+        }
+
+        function addParagraph() {
+            const container = createEditableContainer();
+            const p = document.createElement('p');
+            p.className = 'pdf-paragraph';
+            p.contentEditable = true;
+            p.textContent = 'This is a sample paragraph. Click here to edit the text...';
+            container.appendChild(p);
+            pdfContent.appendChild(container);
+        }
+
+        // --- Table Functionality ---
+        function addTable() {
+            tableModal.classList.remove('hidden');
+        }
+
+        function hideTableModal() {
+            tableModal.classList.add('hidden');
+        }
+        
+        function createTableFromModal() {
+            const cols = parseInt(document.getElementById('columns-input').value, 10) || 3;
+            const rows = parseInt(document.getElementById('rows-input').value, 10) || 2;
+            buildTableDOM(rows, cols);
+            hideTableModal();
+        }
+
+        function buildTableDOM(rowCount, colCount) {
+            const container = createEditableContainer();
+
+            const tableWrapper = document.createElement('div');
+            tableWrapper.className = 'overflow-x-auto';
+            
+            const table = document.createElement('table');
+            table.className = 'pdf-table w-full';
+
+            // Create Header
+            const thead = table.createTHead();
+            const headerRow = thead.insertRow();
+            for (let i = 0; i < colCount; i++) {
+                const th = document.createElement('th');
+                th.contentEditable = true;
+                th.textContent = `Header ${i + 1}`;
+                headerRow.appendChild(th);
+            }
+
+            // Create Body
+            const tbody = table.createTBody();
+            for (let i = 0; i < rowCount; i++) {
+                const bodyRow = tbody.insertRow();
+                for (let j = 0; j < colCount; j++) {
+                    const td = bodyRow.insertCell();
+                    td.contentEditable = true;
+                    td.textContent = '...';
+                }
+            }
+            
+            tableWrapper.appendChild(table);
+            container.appendChild(tableWrapper);
+
+            // Add table controls
+            const controlsDiv = document.createElement('div');
+            controlsDiv.className = 'mt-2 flex gap-2';
+            controlsDiv.innerHTML = `
+                <button class="text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 py-1 px-3 rounded" onclick="addRow(this)">Add Row</button>
+                <button class="text-sm bg-gray-200 hover:bg-gray-300 text-gray-700 py-1 px-3 rounded" onclick="removeRow(this)">Remove Row</button>
+            `;
+            container.appendChild(controlsDiv);
+            
+            pdfContent.appendChild(container);
+        }
+
+        function addRow(button) {
+            const table = button.closest('.element-container').querySelector('.pdf-table tbody');
+            const newRow = table.insertRow();
+            const cellCount = table.rows[0].cells.length;
+            for (let i = 0; i < cellCount; i++) {
+                let newCell = newRow.insertCell(i);
+                newCell.contentEditable = true;
+                newCell.textContent = '...';
+            }
+        }
+
+        function removeRow(button) {
+            const table = button.closest('.element-container').querySelector('.pdf-table tbody');
+            if (table.rows.length > 1) {
+                table.deleteRow(-1);
+            } else {
+                button.textContent = "Can't delete last row!";
+                setTimeout(() => { button.textContent = "Remove Row" }, 2000);
+            }
+        }
+        
+        // --- PDF Generation ---
+        async function generatePdf() {
+            const loadingModal = document.getElementById('loading-modal');
+            loadingModal.classList.remove('hidden');
+
+            const activeElement = document.activeElement;
+            if (activeElement) activeElement.blur();
+            editorToolbar.classList.add('hidden');
+            
+            try {
+                const canvas = await html2canvas(pdfContent, {
+                    scale: 2, useCORS: true, logging: false,
+                    windowWidth: pdfContent.scrollWidth,
+                    windowHeight: pdfContent.scrollHeight
+                });
+                const imgData = canvas.toDataURL('image/png');
+                const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+                const pdfWidth = pdf.internal.pageSize.getWidth();
+                const ratio = canvas.width / pdfWidth;
+                const imgHeight = canvas.height / ratio;
+                let heightLeft = imgHeight;
+                let position = 0;
+                pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+                heightLeft -= pdf.internal.pageSize.getHeight();
+                while (heightLeft > 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, pdfWidth, imgHeight);
+                    heightLeft -= pdf.internal.pageSize.getHeight();
+                }
+                pdf.save('NutriTalks-Diet-Plan.pdf');
+            } catch (error) {
+                console.error("Error generating PDF:", error);
+                alert("Sorry, there was an error creating the PDF. Please try again.");
+            } finally {
+                loadingModal.classList.add('hidden');
+            }
+        }
+    </script>
+</body>
+</html>
